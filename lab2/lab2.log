@@ -1,0 +1,99 @@
+Kelvin Zhang
+4/6/2016
+
+Laboratory Section
+
+1. Set locale variables
+$ export LC_ALL = 'C'
+
+2. Check locale variable values
+$ locale
+
+3. Sort words in /usr/share/dict/words and put into words.txt in working dir
+$ sort /usr/share/dict/words > words.txt
+
+4. Download assignment webpage html
+$ wget http://web.cs.ucla.edu/classes/spring16/cs35L/assign/assign2.html
+
+5. Run commands described on assignment page on assign2.html using the syntax
+$ tr (command) < assign2.html | (consecutive command)
+
+tr -c 'A-Za-z' '[\n*]'
+Replaces non-letter characters with the newline character.
+
+tr -cs 'A-Za-z' '[\n*]'
+Same as previous command except consecutive non-letter characters are replaced
+with a single newline.
+
+tr -cs 'A-Za-z' '[\n*]' | sort
+Takes output of previous command and sorts it in ascending ASCII order
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u
+Same as previous command except only unique sequences of letters are retained
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm - words
+Compares unique sorted output to words file, prints three columns: first column
+with words unique to assign2.html, 2nd with words unique to words and 3rd with
+words shared by both files.
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words
+Same as previous command except only the first column is displayed.
+
+6. Create local copy of the English to Hawaiian website
+$ wget http://mauimapp.com/moolelo/hwnwdseng.htm
+
+7. Write shell script
+
+grep -E '<td>.+</td>'
+Grabs both English and Hawaiian words including the HTML tags
+
+sed '1~2d'
+Deletes the lines with English words
+
+sed 's/<[^>]*>//g'
+Deletes HTML tags
+
+tr '[:upper:]' '[:lower:]'
+Makes all characters lowercase
+
+sed 's/`/'\''/g'
+Replace ` with '
+
+tr -s ',*[:space:]+' '[\n*]'
+Replace consecutive spaces and possible preceding comma with a single newline
+
+grep"['AaEeIiOoUuHhLlWwNnMmKkPp]"
+Discard any words with non-Hawaiian letters
+
+sort -u
+Sort in ASCII order and discard duplicates
+
+Piping these commands into each other gives us the resulting shell script
+
+#!/bin/bash
+grep -E '<td>.+</td>' | sed '1~2d' | sed 's/<[^>]*>//g' | tr '[:upper:]'
+'[:lower:]' | sed 's/`/'\''/g' | tr -s ',*[:space:]*' '[\n*]' | grep -v
+"[^'AaEeIiOoUuHhLlWwNnMmKkPp]" | sort -u
+
+8. Execute shell script to create hwords
+$ ./buildwords < hwnwdseng.htm > hwords
+
+9. Modify last given command to spell check using Hawaiian dictionary
+$ cat assign2.html | tr -cs 'A-Za-z`' '[\n*]' | tr '[:upper:]' '[:lower:]' | \
+sort -u | comm -23 - hwords | wc
+
+406 misspelled Hawaiian words found
+
+Modify last given command to spell check using English dictionary
+$ cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | tr '[:upper:]' '[:lower:]' | \
+sort -u | comm -23 - words | wc
+
+38 misspelled English words found
+
+Examples of misspelled as Hawaiian but not English:
+there, write, example
+
+Examples of misspelled as English but not Hawaiian:
+halau, lau, wiki
+
+
