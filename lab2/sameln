@@ -8,7 +8,6 @@ declare -a ARRAY
 
 let count=0
 
-#loop through files in directory provided
 for FILE in $RESULT
 do
     if [ ! -r "$FILE" ]
@@ -16,7 +15,7 @@ do
         echo "$FILE could not be read"
     elif [ -L "$FILE" ]
     then
-        echo "$FILE is symbolic link"
+        echo "$FILE is a symbolic link"
     elif [ -f "$FILE" ]
     then
         ARRAY[$count]="$FILE"
