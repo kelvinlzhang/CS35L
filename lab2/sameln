@@ -1,0 +1,42 @@
+#!/bin/bash
+
+export LC_ALL='C'
+DIR=$1;
+RESULT=`ls -a $DIR`
+
+declare -a ARRAY
+
+let count=0
+
+#loop through files in directory provided
+for FILE in $RESULT
+do
+    if [ ! -r "$FILE" ]
+    then
+        echo "$FILE could not be read"
+    elif [ -L "$FILE" ]
+    then
+        echo "$FILE is symbolic link"
+    elif [ -f "$FILE" ]
+    then
+        ARRAY[$count]="$FILE"
+        echo "${ARRAY[$count]} is a regular file"
+        let count=count+1
+    else
+        echo "$FILE is not a regular file"
+    fi
+done
+
+for FILE1 in "${ARRAY[@]}"
+do
+    for FILE2 in "${ARRAY[@]}"
+    do
+        if [ "$FILE1" != "$FILE2" ]
+        then
+            if  cmp -s $FILE1 $FILE2
+            then
+                ln -f "$FILE1" "$FILE2"
+            fi
+        fi
+    done
+done
