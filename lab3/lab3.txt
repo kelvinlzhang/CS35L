@@ -1,0 +1,33 @@
+1. To get the file:
+wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-7.6.tar.gz
+
+To unzip file:
+tar -xvf coreutils-7.6.tar.gz
+
+2.
+cd coreutils-7.6/
+Made new directory:
+$ mkdir ~/CS35L/lab3/coreutilsInstall
+Install:
+$ ./configure --prefix="/u/cs/ugrad/kelvinz/CS35L/lab3/coreutilsInstall"
+$ make
+$ make install
+
+3.
+export LC_ALL='en_US.UTF-8'
+Bug can be seen using the command
+$ ./ls -l bin/bash
+Date format is different compared to
+$ ls -l
+
+4.
+$ cd coreutils-7.6
+$ vim patch_file
+Copy and paste patch file from GNU archive
+$ patch -p1 < patch_file
+
+5.
+Test the patched version:
+$ ~/CS35L/lab3/coreutils-7.6/src/ls -l
+Compare the unpatched version:
+$ ~/CS35L/lab3/coreutilInstall/bin/ls -l

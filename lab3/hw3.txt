@@ -1,0 +1,22 @@
+Q1.
+Brady removed the line because it was a goto label that could no longer be
+reached after the patch replaced several lines.
+
+Q2.
+Obviously, this version of the time requires the user to be an English
+speaker. In addition if a program accepts the date as an input and expects
+it in XXXX-XX-XX format it will cause an error.
+
+Q3.
+Returns an error:
+IndexError: list index out of range
+
+random.choice(seq) returns a random element from the non-empty sequence seq.
+If seq is empty, it returns an IndexError.
+
+Q4.
+except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax
+
+To eliminate change (errno, strerror) to err
