@@ -1,0 +1,64 @@
+1. Copy the diffutils folder from ~eggert/src/gnu/diffutils
+
+2. cd into diffutils and then use
+$ git log > git-log.txt
+
+3. $ git tag > git-tag.txt
+
+4. I used grep to search git-log.txt for the commit and copied its hash number,
+then used
+$ git show [hashnumber] > quote-patch.txt
+
+5. $ git checkout v3.0
+
+6. $ patch -p0 quote-patch.txt
+
+7. git status shows tracked and untracked files
+
+8, 9. I used emacs revert C-x v u to revert all of the changes in non .c files
+and then used the diff command C-x v = to find changes in the .c files and
+manually change the ones that effected the comments.
+
+10. I found 2 files diff.c.rej and diff3.c.rej that contained changed that
+needed to be manually applied in their corresponding .c file.
+
+11. git clean -f to remove untracked files
+
+12. git status yields
+
+#   modified:   src/cmp.c
+#   modified:   src/diff.c
+#   modified:   src/diff3.c
+#   modified:   src/dir.c
+#   modified:   src/sdiff.c
+#   modified:   src/util.c
+
+Put this modified patch into a file:
+$ git diff > quote-3.0-patch.txt
+
+13. To build the resulting modified version
+$ ./bootstrap
+
+Applied the gets.diff patch
+$ patch -p0 < gets.diff
+
+$ ./configure
+$ make
+
+To check for right quote mark:
+$ ./src/diff . -
+$ ./src/diff --help
+
+14. To use our newly built diff to check our work I grabbed another copy of
+the original 3.0 code and my modified code, and used cp to copy their src
+folders into diff-utils-3.0 and diff-utils respectively. Then I ran:
+
+$  diffutils-patch/src/diff -pru diffutils-3.0 diffutils-3.0-patch
+> quote-3.0-test.txt
+
+15. To compare I ran
+$ diff quote-3.0-test.txt quote-3.0-patch.txt
+
+There aren't any fundamental differences between the two, only change is the
+use of backticks instead of quotation marks.
+

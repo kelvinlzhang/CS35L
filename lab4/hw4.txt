@@ -1,0 +1,47 @@
+1. Checkout v3.0 to a new branch
+$ git checkout v3.0 -b quote
+
+2. Apply the patch we created
+$ patch -p1 < quote-3.0-patch.txt
+
+3. Copy the original patch description from git-log.txt and paste it into the
+ChangeLog file with the emacs change log command
+
+4. Commit these changes
+$ git add .
+$ git commit -F ChangeLog
+
+5. Generate a patch file
+$ git format-patch -1 --stdout > formatted-patch.txt
+
+6. Check partner's patch:
+
+Name: Andrew Alex
+UID: 404454405
+
+$ git checkout v3.0 -b partner
+$ git am formatted-patch.txt
+$ ./bootstrap
+$ ./configure
+$ make
+$ make check
+
+$ ./src/diff . -
+$ ./src/diff --help
+
+All the ` have been changed to ' so it works.
+
+7. Checking the change log
+$ make distdir
+
+Going into the folder it creates and checking ChangeLog, the first entry is
+the entry I wrote so it works.
+
+8. gitk
+Get another copy of the master files
+$ git clone git://git.savannah.gnu.org/emacs.git master
+$ cd master
+$ gitk
+
+The newest merge point that is no newer than 2015-01-25 is:
+Merge branch 'master' into xwidget 2015-01-25 12:19:27

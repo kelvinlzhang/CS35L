@@ -1,0 +1,12 @@
+Top left: Shows a hierarchical tree of the different branches, the commits
+along those branches, and where those branches merge. Also lists the commit
+titles and the hash value for the commit underneath.
+
+Top middle: Lists the names and emails of the author for each commit
+
+Top right: Lists the date and time of each commit
+
+Bottom left : Shows more detailed hierarchical information along with the change log
+for the commit in diff form
+
+Bottom right: View the files impacted by current commit
